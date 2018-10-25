@@ -27,13 +27,23 @@ public class EpsagonRequestHandler implements RequestHandler<Object, Object> {
     private static final Trace _trace = Trace.getInstance();
 
     private static Class<?> _userHandlerClass;
+    static {
+        String epsagonEntryPoint = System.getenv("EPSAGON_ENTRY_POINT");
+        if (epsagonEntryPoint != null) {
+            try {
+                init(epsagonEntryPoint);
+            } catch (ClassNotFoundException e) {
+                _LOG.error("Could not find class: " + epsagonEntryPoint + ". Please validate the path.");
+            }
+        }
 
-    protected static EpsagonConfig init(String wrappedClass) throws ClassNotFoundException {
+    }
+
+    public static EpsagonConfig init(String wrappedClass) throws ClassNotFoundException {
         Installer.install();
         _userHandlerClass = EpsagonRequestHandler.class.getClassLoader().loadClass(wrappedClass);
         return EpsagonConfig.getInstance();
     }
-
 
     /**
      * {@inheritDoc}
