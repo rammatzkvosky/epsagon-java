@@ -1,7 +1,5 @@
 package com.epsagon.events.operations.aws;
 
-import java.lang.reflect.Executable;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,8 +7,6 @@ import com.amazonaws.Request;
 import com.amazonaws.Response;
 import com.amazonaws.handlers.HandlerContextKey;
 import com.epsagon.protocol.EventOuterClass;
-
-import javax.print.attribute.HashAttributeSet;
 
 public class Factory {
     private final static Map<String, OperationBuilderInterface> OPERATIONS_BY_EVENT = (

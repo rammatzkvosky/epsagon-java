@@ -7,7 +7,6 @@ import com.epsagon.protocol.EventOuterClass;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.UUID;
 
