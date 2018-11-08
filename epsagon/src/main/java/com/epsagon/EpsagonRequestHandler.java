@@ -8,6 +8,8 @@ import com.epsagon.events.EventBuildHelper;
 import com.epsagon.events.runners.LambdaRunner;
 import com.epsagon.events.triggers.TriggerFactory;
 import com.epsagon.protocol.EventOuterClass;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,7 +25,9 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
  */
 public class EpsagonRequestHandler implements RequestHandler<Object, Object> {
     private static final Logger _LOG = LogManager.getLogger(EpsagonRequestHandler.class);
-    private static final ObjectMapper _objectMapper = new ObjectMapper();
+    private static final ObjectMapper _objectMapper = new ObjectMapper()
+              .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true)
+              .registerModule(new JodaModule());
     private static final Trace _trace = Trace.getInstance();
 
     private static Class<?> _userHandlerClass;
@@ -72,24 +76,25 @@ public class EpsagonRequestHandler implements RequestHandler<Object, Object> {
             }
         }
 
-        if (inputType == null) {
+        if (inputType == null || !(inputType instanceof Class<?>)) {
             _LOG.debug("No appropriate interface was found");
         }
-        System.out.println(inputType.getTypeName() + " " + inputType.toString());
+
+        // Not trying and catching here. If malformed input was given we should explode.
+        // TODO: make trace still be sent here. make 2 levels of try / catch.
+        // Should work on anything BUT S3Event, they have a bug (no empty constructor)
+        Object realInput = _objectMapper.convertValue(input, (Class<?>) inputType);
 
         try {
             _trace.addEvent(
-                    TriggerFactory.newBuilder(input, context)
+                    TriggerFactory.newBuilder(realInput, context)
             );
         } catch (Exception e) {
             _trace.addException(e);
         }
 
         try {
-            return userRequestHandler.handleRequest(
-                _objectMapper.convertValue(input, _objectMapper.getTypeFactory().constructType(inputType)),
-                context
-            );
+            return userRequestHandler.handleRequest(realInput, context);
         } catch (Throwable e) {
             EventBuildHelper.setException(runnerBuilder, e);
             throw e;
