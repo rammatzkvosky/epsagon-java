@@ -8,9 +8,10 @@ tracing and performence monitoring.
 <dependency>
   <groupId>com.epsagon</groupId>
   <artifactId>epsagon</artifactId>
-  <version>1.1.0</version>
+  <version>{Epsagon version}</version>
 </dependency>
 ```
+The version will be in the format `n.n.n`
 
 # Getting Started
 ## Quick Start
