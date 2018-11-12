@@ -6,6 +6,7 @@ import java.util.Map;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.events.S3Event;
 
+import com.amazonaws.services.lambda.runtime.events.SNSEvent;
 import com.epsagon.protocol.EventOuterClass;
 
 public class TriggerFactory {
@@ -13,6 +14,9 @@ public class TriggerFactory {
     static {
         TRIGGERS_BY_EVENT.put(
                 S3Event.class, (event) -> S3Trigger.newBuilder((S3Event) event)
+        );
+        TRIGGERS_BY_EVENT.put(
+                SNSEvent.class, (event) -> SNSTrigger.newBuilder((SNSEvent) event)
         );
 
     }

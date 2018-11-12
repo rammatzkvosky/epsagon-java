@@ -6,6 +6,7 @@ import com.epsagon.protocol.EventOuterClass;
 public class BaseTrigger {
     public static EventOuterClass.Event.Builder newBuilder() {
         return EventBuildHelper.newBuilder()
-                .setOrigin("trigger");
+                .setOrigin("trigger")
+                .setDuration(0); // Being explicit.
     }
 }
