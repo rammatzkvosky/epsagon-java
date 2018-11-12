@@ -5,7 +5,15 @@ import com.amazonaws.services.lambda.runtime.Context;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+/**
+ * An executor for handlers implementing the
+ * {@link com.amazonaws.services.lambda.runtime.RequestStreamHandler} interface.
+ */
 public class RequestStreamHandlerExecutor extends Executor {
+    /**
+     * @param userHandlerClass The class of the user handler.
+     * @throws ExecutorException
+     */
     public RequestStreamHandlerExecutor(Class<?> userHandlerClass) throws ExecutorException {
         super(userHandlerClass);
         try {
@@ -23,6 +31,9 @@ public class RequestStreamHandlerExecutor extends Executor {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void execute(InputStream input, OutputStream output, Context context) throws Throwable {
        System.out.println("not implemented yet");
        _userHandlerMethod.invoke(_userHandlerObj, input, output, context);

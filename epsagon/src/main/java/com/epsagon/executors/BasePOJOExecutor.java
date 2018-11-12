@@ -16,15 +16,26 @@ import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 
+/**
+ * An executor that cast the input to a POJO before executing the client request,
+ * and gets a POJO as a response from the client request.
+ */
 public abstract class BasePOJOExecutor extends Executor {
     private static final ObjectMapper _objectMapper = new ObjectMapper()
             .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true)
             .registerModule(new JodaModule());
 
+    /**
+     * @param userHandlerClass The class of the user handler.
+     * @throws ExecutorException
+     */
     public BasePOJOExecutor(Class<?> userHandlerClass) throws ExecutorException {
         super(userHandlerClass);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void execute(InputStream input, OutputStream output, Context context) throws Throwable {
         Trace trace = Trace.getInstance();
 

@@ -2,11 +2,9 @@ package com.epsagon.instrumentation;
 
 import com.amazonaws.Request;
 import com.amazonaws.Response;
-import com.amazonaws.handlers.HandlerContextKey;
 import com.amazonaws.handlers.RequestHandler2;
 import com.epsagon.Trace;
 import com.epsagon.events.operations.aws.Factory;
-import com.epsagon.protocol.EventOuterClass;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.matcher.ElementMatcher;
@@ -16,14 +14,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Instrumentation for the {@link com.amazonaws.AmazonWebServiceClient} class.
+ */
 public class AWSClientInstrumentation extends EpsagonInstrumentation {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ElementMatcher<TypeDescription> getTypeMatcher() {
         return ElementMatchers.named("com.amazonaws.AmazonWebServiceClient")
                 .and(ElementMatchers.declaresField(ElementMatchers.named("requestHandler2s")));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Map<ElementMatcher, String> getTransformers() {
         final Map<ElementMatcher, String> transformers = new HashMap<>();
@@ -31,7 +38,17 @@ public class AWSClientInstrumentation extends EpsagonInstrumentation {
         return transformers;
     }
 
+    /**
+     * A class defining a transformer for {@link com.amazonaws.AmazonWebServiceClient}
+     */
     public static class AWSClientAdvice {
+        /**
+         * Adds code to the end of the {@link com.amazonaws.AmazonWebServiceClient} constructors
+         * to add another request handler.
+         * @param handlers The handlers member of the {@link com.amazonaws.AmazonWebServiceClient}
+         *                 instance whose creation we are instrumenting.
+         * @apiNote we are ignoring Throwables cause it is a constructor.
+         */
         @Advice.OnMethodExit(suppress = Throwable.class)
         public static void addEpsagonHandler(
             @Advice.FieldValue("requestHandler2s") final List<RequestHandler2> handlers
@@ -44,20 +61,20 @@ public class AWSClientInstrumentation extends EpsagonInstrumentation {
             try {
                 handlers.add(new AWSClientInstrumentation.EpsagonAWSRequestHandler());
             } catch (Throwable e) {
-                System.out.println("Error in adding handler");
-                System.out.println(e.getCause());
-                System.out.println(e.getMessage());
-                e.printStackTrace();
+                Trace.getInstance().addException(e);
             }
         }
     }
 
+    /**
+     * A RequestHandler that adds the event to Epsagon's Trace.
+     */
     public static class EpsagonAWSRequestHandler extends RequestHandler2 {
+        private Trace _trace = Trace.getInstance();
+
         /**
         * {@inheritDoc}
         */
-        private Trace _trace = Trace.getInstance();
-
         @Override
         public void beforeRequest(Request<?> request) {
             // TODO: if problem of async event occures, add "promise" here

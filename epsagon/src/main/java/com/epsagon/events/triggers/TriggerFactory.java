@@ -9,6 +9,9 @@ import com.amazonaws.services.lambda.runtime.events.S3Event;
 import com.amazonaws.services.lambda.runtime.events.SNSEvent;
 import com.epsagon.protocol.EventOuterClass;
 
+/**
+ * A factory for AWS Lambda trigger events.
+ */
 public class TriggerFactory {
     private final static Map<Class<?>, TriggerNewBuilderInterface> TRIGGERS_BY_EVENT = new HashMap<>();
     static {
@@ -21,11 +24,20 @@ public class TriggerFactory {
 
     }
 
+    /**
+     * An interface used to dispatch trigger creation lambda expressions.
+     */
     @FunctionalInterface
     interface TriggerNewBuilderInterface {
         EventOuterClass.Event.Builder newBuilder(Object event);
     }
 
+    /**
+     * Creates an appropriate trigger event builder.
+     * @param event The event the Lambda was triggered with.
+     * @param context The context the Lambda was triggered with.
+     * @return An event builder initialized with the required fields.
+     */
     public static EventOuterClass.Event.Builder newBuilder(
         Object event,
         Context context

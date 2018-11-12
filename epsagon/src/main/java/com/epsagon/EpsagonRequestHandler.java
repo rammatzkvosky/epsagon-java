@@ -32,6 +32,12 @@ public class EpsagonRequestHandler implements RequestStreamHandler {
         }
     }
 
+    /**
+     * Initialized Epsagon. Installs the instrumentation agent and set's the client entry point.
+     * @param entryPoint The binary name of the user's entry point to the Lambda
+     * @return A reference to {@link EpsagonConfig} singleton for the user to configure.
+     * @throws EpsagonException
+     */
     public static EpsagonConfig init(String entryPoint) throws EpsagonException {
         Installer.install();
         Executor.Factory executorFactory = new Executor.Factory();

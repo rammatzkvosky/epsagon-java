@@ -7,15 +7,37 @@ import net.bytebuddy.matcher.ElementMatcher;
 
 import java.util.Map;
 
+/**
+ * A base class for Epsagon instrumentation.
+ */
 public abstract class EpsagonInstrumentation {
+    /**
+     * @return An {@link ElementMatcher} matching only classes the instrumentation should
+     * be activated on.
+     */
     protected abstract ElementMatcher<? super TypeDescription> getTypeMatcher();
+
+    /**
+     * @return a map of {@link ElementMatcher} which match functions the instrumentation should
+     * tranform to Transformers class names.
+     */
     protected abstract Map<ElementMatcher, String> getTransformers();
 
+    /**
+     * Activates the instrumentation.
+     * @param parent The current agentBuilder.
+     * @return agentBuilder with the instrumentation activated.
+     */
     public AgentBuilder instrument(final AgentBuilder parent) {
         AgentBuilder agentBuilder = runSpecificTransformers(parent);
         return agentBuilder;
     }
 
+    /**
+     * Runs all the transformers this instrumentation.
+     * @param builder The current builder.
+     * @return agentBuilder with this instrumentation activated.
+     */
     private AgentBuilder runSpecificTransformers(
             AgentBuilder builder
     ) {

@@ -8,6 +8,9 @@ import com.amazonaws.Response;
 import com.amazonaws.handlers.HandlerContextKey;
 import com.epsagon.protocol.EventOuterClass;
 
+/**
+ * Factory for AWS SDK operations.
+ */
 public class Factory {
     private final static Map<String, OperationBuilderInterface> OPERATIONS_BY_EVENT = (
         new HashMap<>()
@@ -19,6 +22,9 @@ public class Factory {
         );
     }
 
+    /**
+     * An interface used for builders polymorphism.
+     */
     @FunctionalInterface
     public interface OperationBuilderInterface {
         EventOuterClass.Event.Builder newBuilder(
@@ -28,6 +34,13 @@ public class Factory {
         );
     }
 
+    /**
+     * Creates a new Builder, with some fields pre-initialized, according to the request type
+     * @param request The AWS Request object.
+     * @param response The AWS Response object, if any. (may be null)
+     * @param error An exception for the request, if any. (may be null)
+     * @return A builder with pre-initialized fields.
+     */
     public static EventOuterClass.Event.Builder newBuilder(
             Request<?> request,
             Response<?> response,
@@ -39,6 +52,10 @@ public class Factory {
         ).newBuilder(request, response, error);
     }
 
+    /**
+     * same as calling {@link Factory#newBuilder(Request, Response, Exception)} with
+     * (request, response, null)
+     */
     public static EventOuterClass.Event.Builder newBuilder(
             Request<?> request,
             Response<?> response

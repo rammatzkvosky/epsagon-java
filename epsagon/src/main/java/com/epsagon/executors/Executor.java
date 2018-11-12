@@ -9,12 +9,19 @@ import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
+/**
+ * A class representing a client's handler executor.
+ */
 public abstract class Executor {
     protected static Class<?> _userHandlerClass;
     protected static Object _userHandlerObj;
     protected static Method _userHandlerMethod;
 
-    public Executor(Class<?> userHandlerClass) throws ExecutorException{
+    /**
+     * @param userHandlerClass The class of the user handler.
+     * @throws ExecutorException
+     */
+    public Executor(Class<?> userHandlerClass) throws ExecutorException {
         _userHandlerClass = userHandlerClass;
         Constructor<?> ctor;
         try {
@@ -26,9 +33,26 @@ public abstract class Executor {
 
     }
 
+    /**
+     * Executes the client handler.
+     * @param input The input stream for the Lambda.
+     * @param output The output stream for the Lambda.
+     * @param context The execution context for the Lambda.
+     * @throws Throwable
+     */
     public abstract void execute(InputStream input, OutputStream output, Context context) throws Throwable;
 
+    /**
+     * A Factory for creating executors.
+     */
     public static class Factory {
+        /**
+         * Creates an appropriate {@link Executor} from a given entry point.
+         * @param entryPoint A string of the form "package.Class::method". If the class implements
+         *                   a predefined AWS Lambda interface, doesn't have to include method.
+         * @return an appropriate {@link Executor} for the client's handler.
+         * @throws ExecutorException
+         */
         public Executor createExecutor(String entryPoint) throws ExecutorException {
             String[] wrappedClassComponents = entryPoint.split(":");
             if (wrappedClassComponents.length < 1) {

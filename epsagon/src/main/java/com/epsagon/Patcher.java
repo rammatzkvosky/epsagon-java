@@ -9,7 +9,14 @@ import java.util.ServiceLoader;
 import static net.bytebuddy.matcher.ElementMatchers.nameStartsWith;
 import static net.bytebuddy.matcher.ElementMatchers.not;
 
+/**
+ * A class for making all the patching required for instrumentation.
+ */
 public class Patcher {
+    /**
+     * Runs all the existing instrumentations.
+     * @param inst The instrumentation object the agentmain received.
+     */
     public static void instrumentAll(Instrumentation inst) {
         AgentBuilder agentBuilder = new AgentBuilder.Default()
                 .disableClassFormatChanges()

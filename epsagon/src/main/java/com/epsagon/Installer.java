@@ -3,9 +3,20 @@ package com.epsagon;
 import com.sun.tools.attach.VirtualMachine;
 import com.sun.tools.attach.VirtualMachineDescriptor;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.util.List;
 
+/**
+ * Installs Epsagon agent, which is a helper way to do instrumentation.
+ */
 public class Installer {
+    private static final Logger _LOG = LogManager.getLogger(EpsagonRequestHandler.class);
+
+    /**
+     * installs the agent.
+     */
     public static synchronized void install() {
         List<VirtualMachineDescriptor> vms = VirtualMachine.list();
 
@@ -18,10 +29,8 @@ public class Installer {
                     vm.detach();
                 }
             } catch (Exception e) {
-                System.out.println(e.toString());
-                System.out.println(e.getMessage());
-                e.printStackTrace();
-                System.out.println("Error attaching to VM, skipping instrumentation");
+                _LOG.error("Error attaching to VM, skipping instrumentation", e);
+                Trace.getInstance().addException(e);
             }
         }
     }
