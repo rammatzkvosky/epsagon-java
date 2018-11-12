@@ -4,7 +4,14 @@ import com.amazonaws.services.lambda.runtime.events.SNSEvent;
 import com.epsagon.events.MetadataBuilder;
 import com.epsagon.protocol.EventOuterClass;
 
+/**
+ * A builder factory for a SNS trigger.
+ */
 public class SNSTrigger {
+    /**
+     * @param event The event the Lambda was triggered with.
+     * @return a builder for a SNS trigger.
+     */
     public static EventOuterClass.Event.Builder newBuilder(
             SNSEvent event
     ) {

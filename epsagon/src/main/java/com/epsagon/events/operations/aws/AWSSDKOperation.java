@@ -11,7 +11,17 @@ import com.epsagon.protocol.EventOuterClass;
 
 import java.util.Optional;
 
+/**
+ * A Builder for an AWS SDK Event.
+ */
 public class AWSSDKOperation {
+    /**
+     * Creates a new Builder, with some fields pre-initialized.
+     * @param request The AWS Request object.
+     * @param response The AWS Response object, if any. (may be null)
+     * @param e An exception for the request, if any. (may be null)
+     * @return A builder with pre-initialized fields.
+     */
     public static EventOuterClass.Event.Builder newBuilder(
             Request<?> request,
             Response<?> response,

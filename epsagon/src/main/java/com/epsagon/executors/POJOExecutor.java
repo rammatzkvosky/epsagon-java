@@ -3,7 +3,15 @@ package com.epsagon.executors;
 import com.amazonaws.services.lambda.runtime.Context;
 import java.lang.reflect.Method;
 
+/**
+ * An executor for client request that don't implement an AWS interface, POJO requests.
+ */
 public class POJOExecutor extends BasePOJOExecutor {
+    /**
+     * @param userHandlerClass The class of the user handler.
+     * @param handlerName The name of the method for the user handler.
+     * @throws ExecutorException
+     */
     public POJOExecutor(Class<?> userHandlerClass, String handlerName) throws ExecutorException {
         super(userHandlerClass);
         Method candidate = null;

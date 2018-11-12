@@ -14,6 +14,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
+/**
+ * The trace, collecting the execution events and reports them when the execution is done.
+ * a singleton.
+ */
 public class Trace {
     private static final int SEND_TIMEOUT_MILLISECONDS = 5000;
     private static final Logger _LOG = LogManager.getLogger(EpsagonRequestHandler.class);
@@ -23,28 +27,46 @@ public class Trace {
     // _config is ALIASED, so it is READ ONLY for this class
     private EpsagonConfig _config = EpsagonConfig.getInstance();
 
+    /**
+     * @return Reference to the trace instance.
+     */
     public static Trace getInstance() {
         return _instance;
     }
 
-    public void reset() {
+    /**
+     * Resets the trace (clears out all the events and exceptions).
+     */
+    public synchronized void reset() {
         _core = TraceOuterClass.Trace.newBuilder()
                 .setPlatform("Java " + System.getProperty("java.version"))
                 .setVersion("1.0.0");
     }
 
+    /**
+     * Adds an event to the trace, if not null.
+     * @param event The event to add.
+     */
     public synchronized void addEvent(EventOuterClass.Event event) {
         if (event != null) {
             _core.addEvents(event);
         }
     }
 
+    /**
+     * Adds an event to the trace from a builder, if not null.
+     * @param eventBuilder The builder of the event to add.
+     */
     public synchronized void addEvent(EventOuterClass.Event.Builder eventBuilder) {
         if (eventBuilder != null) {
             _core.addEvents(eventBuilder.build());
         }
     }
 
+    /**
+     * Adds an exception to the trace.
+     * @param e The exception to add
+     */
     public synchronized void addException(Throwable e) {
         StringWriter stackTrace = new StringWriter();
         e.printStackTrace(new PrintWriter(stackTrace));
@@ -57,14 +79,25 @@ public class Trace {
         );
     }
 
+    /**
+     * Adds an exception to the trace, from an {@link ExceptionOuterClass.Exception} object.
+     * @param e The exception to add
+     */
     public synchronized void addException(ExceptionOuterClass.Exception e) {
         _core.addExceptions(e);
     }
 
+    /**
+     * Adds an exception to the trace, from an {@link ExceptionOuterClass.Exception} object builder.
+     * @param e The builder of the exception to add
+     */
     public synchronized void addException(ExceptionOuterClass.Exception.Builder e) {
         _core.addExceptions(e.build());
     }
 
+    /**
+     * Sends the trace.
+     */
     public void send() {
         _LOG.info("sending trace");
         if (_core == null) {
@@ -76,7 +109,7 @@ public class Trace {
             return;
         }
 
-        _core.setToken(_config.getToken()).setAppName(_config.getappName());
+        _core.setToken(_config.getToken()).setAppName(_config.getAppName());
 
         try {
             URL tc = new URL(_config.getTraceCollectorURL());
@@ -111,9 +144,7 @@ public class Trace {
             }
         } catch (IOException e) {
             _LOG.error(_config.getTraceCollectorURL());
-            _LOG.error("Cannot connect to Trace collector URL. Cannot report to Epsagon.");
-            _LOG.error(e.getMessage());
-            _LOG.error(e.getStackTrace().toString());
+            _LOG.error("Cannot connect to Trace collector URL. Cannot report to Epsagon.", e);
         }
     }
 }

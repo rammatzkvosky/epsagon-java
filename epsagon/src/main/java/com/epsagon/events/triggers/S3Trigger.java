@@ -4,8 +4,14 @@ import com.amazonaws.services.lambda.runtime.events.S3Event;
 import com.amazonaws.services.s3.event.S3EventNotification;
 import com.epsagon.protocol.EventOuterClass;
 
-
+ /**
+ * A builder factory for a S3 trigger.
+ */
 public class S3Trigger {
+    /**
+     * @param event The event the Lambda was triggered with.
+     * @return a builder for a S3 trigger.
+     */
     public static EventOuterClass.Event.Builder newBuilder(
             S3Event event
     ) {

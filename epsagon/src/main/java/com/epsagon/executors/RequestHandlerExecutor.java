@@ -5,7 +5,15 @@ import com.amazonaws.services.lambda.runtime.Context;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+/**
+ * An executor for handlers implementing the
+ * {@link com.amazonaws.services.lambda.runtime.RequestHandler} interface.
+ */
 public class RequestHandlerExecutor extends BasePOJOExecutor {
+    /**
+     * @param userHandlerClass The class of the user handler.
+     * @throws ExecutorException
+     */
     public RequestHandlerExecutor(Class<?> userHandlerClass) throws ExecutorException {
         super(userHandlerClass);
 

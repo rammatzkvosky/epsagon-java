@@ -5,7 +5,15 @@ import com.epsagon.ColdStart;
 import com.epsagon.Region;
 import com.epsagon.protocol.EventOuterClass;
 
+/**
+ * A builder for an event describing a generic Lambda runner.
+ */
 public class BaseLambdaRunner {
+    /**
+     * Creates a new Builder, with some fields pre-initialized.
+     * @param context The AWS Context object the Lambda was triggered with.
+     * @return A builder with pre-initialized fields.
+     */
     public static EventOuterClass.Event.Builder newBuilder(Context context) {
         EventOuterClass.Event.Builder builder = Runner.newBuilder();
         builder.setId(context.getAwsRequestId());

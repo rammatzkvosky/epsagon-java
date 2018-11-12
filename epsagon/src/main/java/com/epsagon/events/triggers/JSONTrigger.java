@@ -10,8 +10,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.UUID;
 
+/**
+ * A builder factory for a JSON trigger.
+ */
 public class JSONTrigger {
     private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    /**
+     * @param event The event the Lambda was triggered with.
+     * @param context The context the Lambda was triggered with.
+     * @return a builder for a JSON trigger.
+     */
     public static EventOuterClass.Event.Builder newBuilder(
         Object event,
         Context context
