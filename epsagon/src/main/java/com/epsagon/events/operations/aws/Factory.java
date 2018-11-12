@@ -55,6 +55,9 @@ public class Factory {
     /**
      * same as calling {@link Factory#newBuilder(Request, Response, Exception)} with
      * (request, response, null)
+     * @param request The AWS Request object.
+     * @param response The AWS Response object, if any. (may be null)
+     * @return A builder with pre-initialized fields.
      */
     public static EventOuterClass.Event.Builder newBuilder(
             Request<?> request,

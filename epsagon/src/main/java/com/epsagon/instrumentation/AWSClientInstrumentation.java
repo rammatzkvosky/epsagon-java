@@ -45,9 +45,9 @@ public class AWSClientInstrumentation extends EpsagonInstrumentation {
         /**
          * Adds code to the end of the {@link com.amazonaws.AmazonWebServiceClient} constructors
          * to add another request handler.
+         * we are ignoring Throwables cause it is a constructor.
          * @param handlers The handlers member of the {@link com.amazonaws.AmazonWebServiceClient}
          *                 instance whose creation we are instrumenting.
-         * @apiNote we are ignoring Throwables cause it is a constructor.
          */
         @Advice.OnMethodExit(suppress = Throwable.class)
         public static void addEpsagonHandler(

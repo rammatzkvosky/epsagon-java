@@ -19,7 +19,7 @@ public abstract class Executor {
 
     /**
      * @param userHandlerClass The class of the user handler.
-     * @throws ExecutorException
+     * @throws ExecutorException Raised when executor initialization fails.
      */
     public Executor(Class<?> userHandlerClass) throws ExecutorException {
         _userHandlerClass = userHandlerClass;
@@ -38,7 +38,7 @@ public abstract class Executor {
      * @param input The input stream for the Lambda.
      * @param output The output stream for the Lambda.
      * @param context The execution context for the Lambda.
-     * @throws Throwable
+     * @throws Throwable Any error raised by the client execution
      */
     public abstract void execute(InputStream input, OutputStream output, Context context) throws Throwable;
 
@@ -51,7 +51,7 @@ public abstract class Executor {
          * @param entryPoint A string of the form "package.Class::method". If the class implements
          *                   a predefined AWS Lambda interface, doesn't have to include method.
          * @return an appropriate {@link Executor} for the client's handler.
-         * @throws ExecutorException
+         * @throws ExecutorException Raised when executor initialization fails.
          */
         public Executor createExecutor(String entryPoint) throws ExecutorException {
             String[] wrappedClassComponents = entryPoint.split(":");

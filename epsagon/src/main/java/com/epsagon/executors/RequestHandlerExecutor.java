@@ -12,7 +12,7 @@ import java.lang.reflect.Type;
 public class RequestHandlerExecutor extends BasePOJOExecutor {
     /**
      * @param userHandlerClass The class of the user handler.
-     * @throws ExecutorException
+     * @throws ExecutorException Raised when executor initialization fails.
      */
     public RequestHandlerExecutor(Class<?> userHandlerClass) throws ExecutorException {
         super(userHandlerClass);

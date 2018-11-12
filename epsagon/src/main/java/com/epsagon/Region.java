@@ -1,6 +1,5 @@
 package com.epsagon;
 
-import javax.xml.bind.annotation.XmlType;
 import java.util.Optional;
 
 /**

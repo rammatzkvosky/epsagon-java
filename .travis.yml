@@ -1,0 +1,47 @@
+cache:
+  directories:
+  - $HOME/.m2
+  - $HOME/.cache/yarn
+  - $HOME/.cache/pip
+branches:
+  only:
+  - master
+
+install: true
+
+jdk:
+- oraclejdk8
+language: java
+notifications:
+  email: false
+sudo: false
+
+before_install: |
+  # only install signing keys under the same circumstances we do a mvn deploy later
+  if [[ "$TRAVIS_PULL_REQUEST" = false ]] && [[ "$TRAVIS_BRANCH" = master ]]; then
+    openssl aes-256-cbc -K $encrypted_b6e52004f498_key -iv $encrypted_b6e52004f498_iv -in maven-artifact-signing-key.asc.enc -out maven-artifact-signing-key.asc -d
+    gpg --import --batch maven-artifact-signing-key.asc
+  fi
+
+# install dependencies used in after_success here because they don't get cached if called in after_success
+before_script:
+- pip install --user awscli && export PATH=$PATH:~/.local/bin/
+- yarn global add @conveyal/maven-semantic-release semantic-release
+
+jobs:
+  include:
+  - stage: build-and-lint
+    script:
+      - ./build.sh
+  - stage: release
+    script:
+      - cd epsagon
+      - semantic-release --prepare @conveyal/maven-semantic-release --publish @semantic-release/github,@conveyal/maven-semantic-release --verify-conditions @semantic-release/github --verify-release @conveyal/maven-semantic-release
+      - cd ..
+
+stages:
+  - build-and-lint
+  - name: release
+    if: branch = master AND type = push
+
+

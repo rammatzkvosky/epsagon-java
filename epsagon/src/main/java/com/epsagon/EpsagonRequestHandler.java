@@ -36,7 +36,7 @@ public class EpsagonRequestHandler implements RequestStreamHandler {
      * Initialized Epsagon. Installs the instrumentation agent and set's the client entry point.
      * @param entryPoint The binary name of the user's entry point to the Lambda
      * @return A reference to {@link EpsagonConfig} singleton for the user to configure.
-     * @throws EpsagonException
+     * @throws EpsagonException Raised for any error in creating the user's handler.
      */
     public static EpsagonConfig init(String entryPoint) throws EpsagonException {
         Installer.install();

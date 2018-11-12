@@ -12,7 +12,7 @@ import java.io.OutputStream;
 public class RequestStreamHandlerExecutor extends Executor {
     /**
      * @param userHandlerClass The class of the user handler.
-     * @throws ExecutorException
+     * @throws ExecutorException Raised when executor initialization fails.
      */
     public RequestStreamHandlerExecutor(Class<?> userHandlerClass) throws ExecutorException {
         super(userHandlerClass);
