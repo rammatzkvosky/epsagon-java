@@ -2,7 +2,7 @@
 This package provides a tracer for Java code running on functions for collection of distributed
 tracing and performence monitoring.
 
-# Where to get packages
+# Where To Get Packages
 * For [Maven](https://maven.apache.org) projects, use:
 ```xml
 <dependency>
@@ -12,8 +12,8 @@ tracing and performence monitoring.
 </dependency>
 ```
 
-# Getting started
-## Quick start
+# Getting Started
+## Quick Start
 The easiest way to get started is as following:
 * set the entry point to your Lambdas as `com.epsagon.EpsagonRequestHandler`
 * set the following environment variables:
@@ -38,7 +38,7 @@ public class EpsagonWrapper extends EpsagonRequestHandler {
         try {
             init("com.yourcompany.YourHandler::yourHandlerMethod")
                     .setToken("<your token>")
-                    .setappName("<your application name>");
+                    .setAppName("<your application name>");
         } catch (Exception e) {
             System.out.println(e);
         }
