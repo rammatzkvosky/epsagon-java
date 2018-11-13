@@ -27,7 +27,7 @@ public abstract class BasePOJOExecutor extends Executor {
 
     /**
      * @param userHandlerClass The class of the user handler.
-     * @throws ExecutorException
+     * @throws ExecutorException Raised when executor initialization fails.
      */
     public BasePOJOExecutor(Class<?> userHandlerClass) throws ExecutorException {
         super(userHandlerClass);

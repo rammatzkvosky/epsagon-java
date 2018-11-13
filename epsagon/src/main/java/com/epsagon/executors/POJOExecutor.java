@@ -10,7 +10,7 @@ public class POJOExecutor extends BasePOJOExecutor {
     /**
      * @param userHandlerClass The class of the user handler.
      * @param handlerName The name of the method for the user handler.
-     * @throws ExecutorException
+     * @throws ExecutorException Raised when executor initialization fails.
      */
     public POJOExecutor(Class<?> userHandlerClass, String handlerName) throws ExecutorException {
         super(userHandlerClass);
