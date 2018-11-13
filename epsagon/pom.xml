@@ -12,6 +12,20 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+    <developers>
+        <developer>
+            <name>Epsagon Dev Team</name>
+            <email>dev@epsagon.com</email>
+            <organization>Epsagon</organization>
+            <organizationUrl>https://epsagon.com/</organizationUrl>
+        </developer>
+        <developer>
+            <name>Gal Bashan</name>
+            <email>gal@epsagon.com</email>
+            <organization>Epsagon</organization>
+            <organizationUrl>https://epsagon.com/</organizationUrl>
+        </developer>
+    </developers>
     <scm>
         <url>https://github.com/epsagon/epsagon-java</url>
         <connection>scm:git:git://github.com/epsagon/epsagon-java.git</connection>
