@@ -20,8 +20,6 @@ notifications:
 
 sudo: false
 
-# install dependencies used in after_success here because they don't get cached if called in after_success
-
 jobs:
   include:
   - stage: build-and-lint
@@ -38,6 +36,7 @@ jobs:
       - yarn global add @conveyal/maven-semantic-release semantic-release
     script:
       - ./build.sh
+    after_success:
       - cd epsagon
       - semantic-release --prepare @conveyal/maven-semantic-release --publish @semantic-release/github,@conveyal/maven-semantic-release --verify-conditions @semantic-release/github --verify-release @conveyal/maven-semantic-release
       - cd ..
